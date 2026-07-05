@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Flight Booking Simulator</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <header class="topbar">
+    <div class="topbar__brand">
+      <span class="topbar__logo">&#9992;</span>
+      <h1>Flight Booking Simulator</h1>
+    </div>
+    <div class="topbar__status">
+      <span class="dot" id="apiStatusDot"></span>
+      <span id="apiStatusText">Comprobando API&hellip;</span>
+    </div>
+  </header>
+
+  <main class="layout">
+
+    <!-- ================= RESERVA MANUAL ================= -->
+    <section class="card">
+      <h2>Nueva reserva manual</h2>
+      <form id="bookingForm" class="form">
+        <label>
+          Vuelo
+          <select id="flightSelect" required>
+            <option value="">Selecciona un vuelo&hellip;</option>
+          </select>
+        </label>
+
+        <label>
+          Clase
+          <select id="seatClassSelect" required>
+            <option value="">Selecciona una clase&hellip;</option>
+          </select>
+        </label>
+
+        <label>
+          Nombre completo
+          <input type="text" id="customerName" required placeholder="Ana García López">
+        </label>
+
+        <label>
+          Email
+          <input type="email" id="customerEmail" required placeholder="ana.garcia@example.com">
+        </label>
+
+        <label>
+          Documento (DNI/Pasaporte)
+          <input type="text" id="customerDocument" required placeholder="12345678A">
+        </label>
+
+        <label>
+          Teléfono (opcional)
+          <input type="text" id="customerPhone" placeholder="+34 600 000 000">
+        </label>
+
+        <button type="submit" class="btn btn--primary">Crear reserva</button>
+      </form>
+      <p id="bookingFormMessage" class="form-message"></p>
+    </section>
+
+    <!-- ================= GENERADOR ALEATORIO (RBG) ================= -->
+    <section class="card">
+      <h2>Generador Aleatorio de Reservas (RBG)</h2>
+      <p class="card__subtitle">Simula actividad de negocio continua generando reservas automáticamente.</p>
+
+      <div class="rbg-controls">
+        <label>
+          Reservas por minuto
+          <input type="range" id="rbgRate" min="1" max="120" value="20">
+          <span id="rbgRateValue">20</span>
+        </label>
+
+        <div class="rbg-buttons">
+          <button id="rbgStartBtn" class="btn btn--primary">▶ Iniciar</button>
+          <button id="rbgStopBtn" class="btn btn--danger" disabled>■ Detener</button>
+        </div>
+      </div>
+
+      <div class="rbg-stats">
+        <div class="stat">
+          <span class="stat__label">Estado</span>
+          <span class="stat__value" id="rbgStatusValue">Detenido</span>
+        </div>
+        <div class="stat">
+          <span class="stat__label">Generadas en esta sesión</span>
+          <span class="stat__value" id="rbgGeneratedCount">0</span>
+        </div>
+        <div class="stat">
+          <span class="stat__label">Errores</span>
+          <span class="stat__value" id="rbgErrorCount">0</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= ÚLTIMAS RESERVAS ================= -->
+    <section class="card card--wide">
+      <h2>Últimas reservas</h2>
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Localizador</th>
+            <th>Cliente</th>
+            <th>Vuelo</th>
+            <th>Ruta</th>
+            <th>Clase</th>
+            <th>Precio</th>
+            <th>Estado</th>
+            <th>Creada</th>
+          </tr>
+        </thead>
+        <tbody id="recentBookingsBody">
+          <tr><td colspan="8" class="table__empty">Cargando reservas&hellip;</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+  </main>
+
+  <script src="js/config.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/rbg.js"></script>
+</body>
+</html>
