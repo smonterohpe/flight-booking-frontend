@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Flight Booking Simulator · Acceso</title>
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/login.css">
+</head>
+<body class="login-body">
+
+  <div class="login-card">
+    <div class="login-card__icon">&#9992;</div>
+    <h1>Flight Booking Simulator</h1>
+
+    <form id="loginForm" class="form">
+      <label>
+        Usuario
+        <input type="text" id="username" autocomplete="username" required>
+      </label>
+
+      <label>
+        Contraseña
+        <div class="password-field">
+          <input type="password" id="password" autocomplete="current-password" required>
+          <button type="button" id="togglePassword" class="password-toggle" aria-label="Mostrar contraseña">&#128065;</button>
+        </div>
+      </label>
+
+      <button type="submit" class="btn btn--primary btn--block">Entrar</button>
+      <p id="loginMessage" class="form-message"></p>
+    </form>
+  </div>
+
+  <script src="js/auth.js"></script>
+</body>
+</html>

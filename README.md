@@ -69,6 +69,40 @@ La aplicación quedará accesible en `http://IP_DE_ESTA_VM/`.
   estado en la cabecera y los contadores de "Errores" del RBG lo
   reflejarán inmediatamente — útil para narrar la demo.
 
+## Acceso
+
+Se ha añadido una pantalla de login simple (`login.html`) con usuario
+y contraseña fijos para la demo:
+
+- **Usuario:** `admin`
+- **Contraseña:** `admin`
+
+La sesión se guarda en `sessionStorage` del navegador — es solo para
+la demo, no un sistema de autenticación real. `index.html` redirige
+automáticamente a `login.html` si no hay sesión activa.
+
+## Servicio de monitorización (sys-probe)
+
+Igual que en la VM de base de datos, esta VM de frontend incluye un
+`sys-probe` (carpeta `sys-probe/`) que expone CPU/RAM/Disco/Uptime en
+el puerto `5001`, consultado por la Observability Console.
+
+```bash
+sudo useradd -r -s /bin/false probe || true
+sudo mkdir -p /opt/sys-probe
+sudo cp -r sys-probe/* /opt/sys-probe/
+cd /opt/sys-probe
+sudo python3 -m venv venv
+sudo ./venv/bin/pip install -r requirements.txt
+sudo cp sys-probe.service /etc/systemd/system/
+sudo chown -R probe:probe /opt/sys-probe
+sudo systemctl daemon-reload
+sudo systemctl enable --now sys-probe
+```
+
+Abre el puerto 5001 en el firewall **solo** hacia la VM de la
+Observability Console.
+
 ## Próximos pasos
 
 1. `observability-console`: dashboard que consumirá `/api/kpis/*` y `/api/health` de este mismo backend, además de la API de Zerto

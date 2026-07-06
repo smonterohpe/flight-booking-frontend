@@ -110,6 +110,9 @@ const App = (() => {
   }
 
   async function init() {
+    Auth.requireAuth();
+
+    document.getElementById("logoutBtn").addEventListener("click", Auth.logout);
     bookingForm.addEventListener("submit", handleBookingSubmit);
 
     await checkHealth();
