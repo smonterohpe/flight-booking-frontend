@@ -63,6 +63,13 @@ svg.icon { width: 16px; height: 16px; flex-shrink: 0; stroke: currentColor; fill
   flex-direction: column;
   padding: 16px 12px;
   transition: width 0.18s ease;
+  /* Fija la barra a la altura de la ventana, con su propio scroll,
+     para que el pie (idioma/tema/salir) no dependa del scroll de la
+     página ni de lo larga que sea la tabla de la vista activa. */
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
 }
 .sidebar.is-collapsed { width: 72px; }
 
