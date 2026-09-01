@@ -12,6 +12,8 @@ Forma parte de la demo de continuidad de negocio junto con:
 
 ## Qué incluye
 
+- **Modo oscuro** con persistencia, y **3 idiomas** (Español/Português/English), igual que la Observability Console
+- **Iconos SVG** en vez de emojis (más consistente entre sistemas operativos/navegadores)
 - **Menú lateral colapsable** con 5 vistas: Reservas, Clientes, Vuelos, Usuarios, About
   (estilo inspirado en el "Order Simulator" de referencia)
 - **Reservas**: formulario de reserva manual + tabla de últimas reservas en vivo

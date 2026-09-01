@@ -1,16 +1,23 @@
 const App = (() => {
   const apiStatusDot = document.getElementById("apiStatusDot");
   const apiStatusText = document.getElementById("apiStatusText");
+  let lastHealthOk = null;
+
+  function renderHealthText() {
+    if (lastHealthOk === null) return;
+    apiStatusText.textContent = I18n.t(lastHealthOk ? "common.apiConnected" : "common.apiIssue");
+  }
 
   async function checkHealth() {
     try {
       const health = await Api.getHealth();
-      const ok = health.status === "ok";
-      apiStatusDot.className = `dot ${ok ? "dot--ok" : "dot--error"}`;
-      apiStatusText.textContent = ok ? "API conectada" : "API con problemas";
+      lastHealthOk = health.status === "ok";
+      apiStatusDot.className = `dot ${lastHealthOk ? "dot--ok" : "dot--error"}`;
+      renderHealthText();
     } catch (_) {
+      lastHealthOk = false;
       apiStatusDot.className = "dot dot--error";
-      apiStatusText.textContent = "API no disponible";
+      apiStatusText.textContent = I18n.t("common.apiUnavailable");
     }
   }
 
@@ -18,6 +25,7 @@ const App = (() => {
     Auth.requireAuth();
 
     document.getElementById("logoutBtn").addEventListener("click", Auth.logout);
+    document.addEventListener("i18n:changed", renderHealthText);
 
     await checkHealth();
     setInterval(checkHealth, 15000);

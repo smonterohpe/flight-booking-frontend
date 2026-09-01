@@ -57,7 +57,7 @@ const Auth = (() => {
       if (login(username, password)) {
         window.location.href = "index.html";
       } else {
-        message.textContent = "Usuario o contraseña incorrectos";
+        message.textContent = window.I18n ? I18n.t("login.error") : "Usuario o contraseña incorrectos";
         message.className = "form-message form-message--error";
       }
     });

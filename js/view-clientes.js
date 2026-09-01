@@ -12,7 +12,7 @@ const ViewClientes = (() => {
       if (badge) badge.textContent = customers.length >= 200 ? "200+" : customers.length;
 
       if (customers.length === 0) {
-        body.innerHTML = '<tr><td colspan="5" class="table__empty">Todavía no hay clientes.</td></tr>';
+        body.innerHTML = `<tr><td colspan="5" class="table__empty">${I18n.t("clientes.empty")}</td></tr>`;
         return;
       }
       body.innerHTML = customers.map((c) => `
@@ -25,7 +25,7 @@ const ViewClientes = (() => {
         </tr>
       `).join("");
     } catch (err) {
-      body.innerHTML = `<tr><td colspan="5" class="table__empty">Error cargando clientes: ${err.message}</td></tr>`;
+      body.innerHTML = `<tr><td colspan="5" class="table__empty">${I18n.t("clientes.errorLoading")}: ${err.message}</td></tr>`;
     }
   }
 
@@ -34,6 +34,7 @@ const ViewClientes = (() => {
     document.addEventListener("view:changed", (e) => {
       if (e.detail.view === "clientes") load();
     });
+    document.addEventListener("i18n:changed", load);
     setInterval(() => {
       if (document.getElementById("view-clientes").classList.contains("view-panel--active")) load();
     }, 8000);

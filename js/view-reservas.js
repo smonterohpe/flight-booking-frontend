@@ -23,7 +23,7 @@ const ViewReservas = (() => {
 
   function renderCatalogSelects() {
     const flights = Store.getFlights();
-    flightSelect.innerHTML = '<option value="">Selecciona un vuelo…</option>' +
+    flightSelect.innerHTML = `<option value="">${I18n.t("reservas.flightPlaceholder")}</option>` +
       flights.map((f) => `
         <option value="${f.id}">
           ${f.flight_number} · ${formatRoute(f)} · ${formatDateTime(f.departure_time)} · €${f.base_price}
@@ -31,7 +31,7 @@ const ViewReservas = (() => {
       `).join("");
 
     const seatClasses = Store.getSeatClasses();
-    seatClassSelect.innerHTML = '<option value="">Selecciona una clase…</option>' +
+    seatClassSelect.innerHTML = `<option value="">${I18n.t("reservas.classPlaceholder")}</option>` +
       seatClasses.map((c) => `<option value="${c.code}">${c.name} (x${c.price_multiplier})</option>`).join("");
   }
 
@@ -41,7 +41,7 @@ const ViewReservas = (() => {
       if (badgeReservas) badgeReservas.textContent = bookings.length >= 20 ? "20+" : bookings.length;
 
       if (bookings.length === 0) {
-        recentBookingsBody.innerHTML = '<tr><td colspan="6" class="table__empty">Todavía no hay reservas.</td></tr>';
+        recentBookingsBody.innerHTML = `<tr><td colspan="6" class="table__empty">${I18n.t("reservas.empty")}</td></tr>`;
         return;
       }
       recentBookingsBody.innerHTML = bookings.map((b) => `
@@ -55,7 +55,7 @@ const ViewReservas = (() => {
         </tr>
       `).join("");
     } catch (err) {
-      recentBookingsBody.innerHTML = `<tr><td colspan="6" class="table__empty">Error cargando reservas: ${err.message}</td></tr>`;
+      recentBookingsBody.innerHTML = `<tr><td colspan="6" class="table__empty">${I18n.t("reservas.errorLoading")}: ${err.message}</td></tr>`;
     }
   }
 
@@ -79,7 +79,7 @@ const ViewReservas = (() => {
 
     try {
       const booking = await Api.createBooking(payload);
-      showFormMessage(`Reserva creada: ${booking.booking_reference}`, "success");
+      showFormMessage(`${I18n.t("reservas.created")}: ${booking.booking_reference}`, "success");
       bookingForm.reset();
       loadRecentBookings();
     } catch (err) {
@@ -92,6 +92,10 @@ const ViewReservas = (() => {
     renderCatalogSelects();
     loadRecentBookings();
     setInterval(loadRecentBookings, 5000);
+    document.addEventListener("i18n:changed", () => {
+      renderCatalogSelects();
+      loadRecentBookings();
+    });
   }
 
   return { init, renderCatalogSelects, loadRecentBookings };

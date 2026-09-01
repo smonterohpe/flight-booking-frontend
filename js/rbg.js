@@ -83,7 +83,7 @@ const RBG = (() => {
       errorCount += 1;
       errorCountValue.textContent = errorCount;
       const lastErrorEl = document.getElementById("rbgLastError");
-      if (lastErrorEl) lastErrorEl.textContent = `Último error: ${err.message}`;
+      if (lastErrorEl) lastErrorEl.textContent = `${I18n.t("rbg.lastError")}: ${err.message}`;
       console.error("RBG: error creando reserva", err);
     }
   }
@@ -99,7 +99,7 @@ const RBG = (() => {
 
   function start() {
     if (timerId !== null) return;
-    statusValue.textContent = "Generando…";
+    statusValue.textContent = I18n.t("rbg.statusRunning");
     startBtn.disabled = true;
     stopBtn.disabled = false;
     scheduleNextTick();
@@ -108,7 +108,7 @@ const RBG = (() => {
   function stop() {
     if (timerId !== null) clearTimeout(timerId);
     timerId = null;
-    statusValue.textContent = "Detenido";
+    statusValue.textContent = I18n.t("rbg.statusStopped");
     startBtn.disabled = false;
     stopBtn.disabled = true;
   }
@@ -119,6 +119,10 @@ const RBG = (() => {
     });
     startBtn.addEventListener("click", start);
     stopBtn.addEventListener("click", stop);
+
+    document.addEventListener("i18n:changed", () => {
+      statusValue.textContent = timerId !== null ? I18n.t("rbg.statusRunning") : I18n.t("rbg.statusStopped");
+    });
   }
 
   return { init };

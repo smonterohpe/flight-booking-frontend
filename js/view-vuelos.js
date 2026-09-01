@@ -15,7 +15,7 @@ const ViewVuelos = (() => {
     if (badge) badge.textContent = flights.length;
 
     if (flights.length === 0) {
-      body.innerHTML = '<tr><td colspan="6" class="table__empty">No hay vuelos en el catálogo.</td></tr>';
+      body.innerHTML = `<tr><td colspan="6" class="table__empty">${I18n.t("vuelos.empty")}</td></tr>`;
       return;
     }
     body.innerHTML = flights.map((f) => `
@@ -35,7 +35,7 @@ const ViewVuelos = (() => {
       const flights = await Api.getFlights({ limit: 200 });
       render(flights);
     } catch (err) {
-      body.innerHTML = `<tr><td colspan="6" class="table__empty">Error cargando vuelos: ${err.message}</td></tr>`;
+      body.innerHTML = `<tr><td colspan="6" class="table__empty">${I18n.t("vuelos.errorLoading")}: ${err.message}</td></tr>`;
     }
   }
 
@@ -46,6 +46,7 @@ const ViewVuelos = (() => {
     document.addEventListener("view:changed", (e) => {
       if (e.detail.view === "vuelos") load();
     });
+    document.addEventListener("i18n:changed", load);
   }
 
   return { init, load };
