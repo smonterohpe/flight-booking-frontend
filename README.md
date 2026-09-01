@@ -1,7 +1,9 @@
 # flight-booking-frontend
 
 Simulador de reservas de vuelos (UI de negocio) con **Generador
-Aleatorio de Reservas (RBG)** integrado. HTML/CSS/JS servidos vía NGINX.
+Aleatorio de Reservas (RBG)** integrado. App de una sola página con
+menú lateral, servida como HTML/CSS/JS plano vía NGINX (sin frameworks
+ni build step).
 
 Forma parte de la demo de continuidad de negocio junto con:
 - `flight-booking-database` — esquema PostgreSQL
@@ -10,13 +12,20 @@ Forma parte de la demo de continuidad de negocio junto con:
 
 ## Qué incluye
 
-- **Reserva manual**: formulario para crear una reserva real contra un vuelo del catálogo
-- **RBG (Random Booking Generator)**: genera reservas aleatorias de forma continua a un ritmo configurable (reservas/minuto), simulando actividad de negocio constante — es lo que la Observability Console visualizará en tiempo real
-- **Últimas reservas**: tabla que se refresca sola cada 5 segundos
-- **Indicador de estado de la API** en la cabecera
-
-Todo el código es HTML/CSS/JS plano, sin frameworks ni build step —
-igual que en el proyecto de referencia.
+- **Menú lateral colapsable** con 5 vistas: Reservas, Clientes, Vuelos, Usuarios, About
+  (estilo inspirado en el "Order Simulator" de referencia)
+- **Reservas**: formulario de reserva manual + tabla de últimas reservas en vivo
+- **Clientes**: listado de todos los clientes dados de alta (vía `GET /api/customers`)
+- **Vuelos**: catálogo completo de vuelos con estado
+- **Usuarios**: vista simple con el único usuario admin de la demo (no hay gestión de usuarios real)
+- **About**: descripción de la app, stack tecnológico y arquitectura
+- **RBG (Random Booking Generator)**: ahora integrado como panel compacto en la propia
+  barra lateral — genera reservas aleatorias de forma continua a un ritmo configurable
+  (reservas/minuto), simulando actividad de negocio constante
+- **Login** con paleta inspirada en Iberia (rojo/blanco) y huecos para los logos de
+  HPE y Zerto junto al logo de la app — ver `assets/logos/README.md` para añadir los
+  ficheros reales (son marca registrada, no se incluyen en este repo)
+- **Indicador de estado de la API** en la barra lateral
 
 ## Arquitectura de red
 
@@ -39,7 +48,7 @@ sudo apt update && sudo apt install -y nginx
 
 # 2. Copiar los ficheros estáticos
 sudo mkdir -p /var/www/flight-booking-frontend
-sudo cp -r index.html css js /var/www/flight-booking-frontend/
+sudo cp -r index.html login.html css js assets /var/www/flight-booking-frontend/
 sudo chown -R www-data:www-data /var/www/flight-booking-frontend
 
 # 3. Configurar el virtual host

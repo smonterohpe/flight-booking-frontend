@@ -3,6 +3,21 @@
 const Api = (() => {
   const BASE = (window.APP_CONFIG && window.APP_CONFIG.API_BASE_URL) || "";
 
+  function formatErrorDetail(detail, fallback) {
+    if (!detail) return fallback;
+    if (typeof detail === "string") return detail;
+    if (Array.isArray(detail)) {
+      // Errores de validación de FastAPI/Pydantic: [{loc, msg, type}, ...]
+      return detail
+        .map((e) => {
+          const field = Array.isArray(e.loc) ? e.loc.slice(1).join(".") : "";
+          return field ? `${field}: ${e.msg}` : e.msg;
+        })
+        .join(" | ");
+    }
+    return JSON.stringify(detail);
+  }
+
   async function request(path, options = {}) {
     const response = await fetch(`${BASE}/api${path}`, {
       headers: { "Content-Type": "application/json" },
@@ -13,7 +28,7 @@ const Api = (() => {
       let detail = response.statusText;
       try {
         const body = await response.json();
-        detail = body.detail || detail;
+        detail = formatErrorDetail(body.detail, detail);
       } catch (_) { /* respuesta sin cuerpo JSON */ }
       throw new Error(detail);
     }
@@ -29,6 +44,10 @@ const Api = (() => {
       return request(`/flights${query ? `?${query}` : ""}`);
     },
     getSeatClasses: () => request("/seat-classes"),
+    getCustomers: (params = {}) => {
+      const query = new URLSearchParams(params).toString();
+      return request(`/customers${query ? `?${query}` : ""}`);
+    },
     getBookings: (params = {}) => {
       const query = new URLSearchParams(params).toString();
       return request(`/bookings${query ? `?${query}` : ""}`);

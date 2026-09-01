@@ -43,21 +43,27 @@ const RBG = (() => {
     return `${digits}${letter}`;
   }
 
+  function stripDiacritics(text) {
+    return text.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+  }
+
   function buildFakeCustomer() {
     const firstName = pickRandom(FIRST_NAMES);
     const lastName = pickRandom(LAST_NAMES);
     const fullName = `${firstName} ${lastName}`;
-    const emailTag = Math.floor(Math.random() * 100000);
+    const emailTag = Math.floor(Math.random() * 1000000);
+    const emailFirstName = stripDiacritics(firstName).toLowerCase();
+    const emailLastName = stripDiacritics(lastName).toLowerCase().replace(/\s+/g, "-");
     return {
       full_name: fullName,
-      email: `${firstName.toLowerCase()}.${lastName.toLowerCase()}${emailTag}@rbg-demo.test`,
+      email: `${emailFirstName}.${emailLastName}${emailTag}@rbg-demo.test`,
       document_id: randomDocumentId(),
       phone: null,
     };
   }
 
   async function generateOneBooking() {
-    const flights = App.getFlightsCache();
+    const flights = Store.getFlights();
     if (!flights || flights.length === 0) return;
 
     const flight = pickRandom(flights);
@@ -76,6 +82,8 @@ const RBG = (() => {
     } catch (err) {
       errorCount += 1;
       errorCountValue.textContent = errorCount;
+      const lastErrorEl = document.getElementById("rbgLastError");
+      if (lastErrorEl) lastErrorEl.textContent = `Último error: ${err.message}`;
       console.error("RBG: error creando reserva", err);
     }
   }
